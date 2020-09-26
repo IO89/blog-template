@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, graphql } from "gatsby";
+import Img from "gatsby-image";
 
 import Bio from "../components/bio";
 import Layout from "../components/layout";
@@ -22,8 +23,11 @@ const BlogPostContentfulTemplate = ({ data, pageContext, location }) => {
           <h1 itemProp="headline">{post.title}</h1>
           <h2 itemProp="subtitle">{post.subtitle}</h2>
           <p>{post.date}</p>
-          <p>{post.author}</p>
+          <Bio author={post.author} />
         </header>
+        <section>
+          <Img fluid={post.image.fluid} />
+        </section>
         <section
           dangerouslySetInnerHTML={{
             __html: post.content.childContentfulRichText.html,
@@ -31,9 +35,7 @@ const BlogPostContentfulTemplate = ({ data, pageContext, location }) => {
           itemProp="articleBody"
         />
         <hr />
-        <footer>
-          <Bio />
-        </footer>
+        <footer />
       </article>
       <nav className="blog-post-nav">
         <ul
@@ -78,7 +80,15 @@ export const pageQuery = graphql`
       title
       subtitle
       date
-      author
+      author {
+        name
+        summary
+      }
+      image {
+        fluid {
+          ...GatsbyContentfulFluid
+        }
+      }
       content {
         childContentfulRichText {
           html
