@@ -80,7 +80,7 @@ module.exports = {
       resolve: `gatsby-source-contentful`,
       options: {
         spaceId: `7ky89jqqorzn`,
-        accessToken: process.env.CONTENTFUL_ACCESS_TOKEN,
+        accessToken: process.env.GATSBY_CONTENTFUL_ACCESS_TOKEN,
       },
     },
     `@contentful/gatsby-transformer-contentful-richtext`,

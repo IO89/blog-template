@@ -1,10 +1,10 @@
-const path = require(`path`)
+const path = require(`path`);
 
 exports.createPages = async ({ graphql, actions, reporter }) => {
-  const { createPage } = actions
+  const { createPage } = actions;
 
   // Define a template for blog post
-  const blogPost = path.resolve(`./src/templates/blog-post-contentful.js`)
+  const blogPost = path.resolve(`./src/templates/blog-post-contentful.js`);
 
   // Get all blog posts
   const result = await graphql(
@@ -20,17 +20,17 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         }
       }
     `
-  )
+  );
 
   if (result.errors) {
     reporter.panicOnBuild(
       `There was an error loading your blog posts`,
       result.errors
-    )
-    return
+    );
+    return;
   }
 
-  const posts = result.data.allContentfulPost.edges
+  const posts = result.data.allContentfulPost.edges;
 
   // Create blog posts pages
   // But only if there's at least one markdown file found at "content/blog" (defined in gatsby-config.js)
@@ -38,8 +38,8 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 
   if (posts.length > 0) {
     posts.forEach((post, index) => {
-      const previous = index === posts.length - 1 ? null : posts[index + 1]
-      const next = index === 0 ? null : posts[index - 1]
+      const previous = index === posts.length - 1 ? null : posts[index + 1];
+      const next = index === 0 ? null : posts[index - 1];
 
       createPage({
         path: post.node.slug,
@@ -49,13 +49,13 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
           previous,
           next,
         },
-      })
-    })
+      });
+    });
   }
-}
+};
 
 exports.createSchemaCustomization = ({ actions }) => {
-  const { createTypes } = actions
+  const { createTypes } = actions;
 
   // Explicitly define the siteMetadata {} object
   // This way those will always be defined even if removed from gatsby-config.js
@@ -67,31 +67,11 @@ exports.createSchemaCustomization = ({ actions }) => {
     type SiteSiteMetadata {
       author: Author
       siteUrl: String
-      social: Social
     }
 
     type Author {
       name: String
       summary: String
     }
-
-    type Social {
-      twitter: String
-    }
-
-    type MarkdownRemark implements Node {
-      frontmatter: Frontmatter
-      fields: Fields
-    }
-
-    type Frontmatter {
-      title: String
-      description: String
-      date: Date @dateformat
-    }
-
-    type Fields {
-      slug: String
-    }
-  `)
-}
+  `);
+};
