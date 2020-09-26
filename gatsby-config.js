@@ -59,7 +59,6 @@ module.exports = {
         //trackingId: `ADD YOUR TRACKING ID HERE`,
       },
     },
-    `gatsby-plugin-feed`,
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
@@ -79,8 +78,9 @@ module.exports = {
     {
       resolve: `gatsby-source-contentful`,
       options: {
-        spaceId: `7ky89jqqorzn`,
-        accessToken: process.env.GATSBY_CONTENTFUL_ACCESS_TOKEN,
+        spaceId: process.env.CONTENTFUL_SPACE_ID,
+        accessToken:
+          process.env.CONTENTFUL_ACCESS_TOKEN || CONTENTFUL_ACCESS_TOKEN,
       },
     },
     `@contentful/gatsby-transformer-contentful-richtext`,
