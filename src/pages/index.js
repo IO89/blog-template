@@ -1,13 +1,13 @@
-import React from "react"
-import { Link, graphql } from "gatsby"
+import React from "react";
+import { Link, graphql } from "gatsby";
 
-import Bio from "../components/bio"
-import Layout from "../components/layout"
-import SEO from "../components/seo"
+import Bio from "../components/bio";
+import Layout from "../components/layout";
+import SEO from "../components/seo";
 
 const BlogIndex = ({ data, location }) => {
-  const siteTitle = data.site.siteMetadata?.title || `Title`
-  const posts = data.allMarkdownRemark.nodes
+  const siteTitle = data.site.siteMetadata?.title || `Title`;
+  const posts = data.allContentfulPost.edges;
 
   if (posts.length === 0) {
     return (
@@ -20,7 +20,7 @@ const BlogIndex = ({ data, location }) => {
           gatsby-config.js).
         </p>
       </Layout>
-    )
+    );
   }
 
   return (
@@ -28,38 +28,33 @@ const BlogIndex = ({ data, location }) => {
       <SEO title="All posts" />
       <Bio />
       {posts.map(post => {
-        const title = post.frontmatter.title || post.fields.slug
+        const title = post.node.title || post.node.slug;
         return (
           <article
-            key={post.fields.slug}
+            key={post.node.slug}
             className="post-list-item"
             itemScope
             itemType="http://schema.org/Article"
           >
             <header>
               <h2>
-                <Link to={post.fields.slug} itemProp="url">
+                <Link to={post.node.slug} itemProp="url">
                   <span itemProp="headline">{title}</span>
                 </Link>
               </h2>
-              <small>{post.frontmatter.date}</small>
+              <small>{post.node.date}</small>
             </header>
             <section>
-              <p
-                dangerouslySetInnerHTML={{
-                  __html: post.frontmatter.description || post.excerpt,
-                }}
-                itemProp="description"
-              />
+              <p>{post.node.subtitle}</p>
             </section>
           </article>
-        )
+        );
       })}
     </Layout>
-  )
-}
+  );
+};
 
-export default BlogIndex
+export default BlogIndex;
 
 export const pageQuery = graphql`
   query {
@@ -68,18 +63,16 @@ export const pageQuery = graphql`
         title
       }
     }
-    allMarkdownRemark(sort: { fields: [frontmatter___date], order: DESC }) {
-      nodes {
-        excerpt
-        fields {
-          slug
-        }
-        frontmatter {
-          date(formatString: "MMMM DD, YYYY")
+    allContentfulPost {
+      edges {
+        node {
           title
-          description
+          subtitle
+          author
+          slug
+          date
         }
       }
     }
   }
-`
+`;
