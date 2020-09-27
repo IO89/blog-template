@@ -4,7 +4,6 @@ import Img from "gatsby-image";
 
 import Bio from "../components/bio";
 import Layout from "../components/layout";
-import SEO from "../components/seo";
 
 const BlogPostContentfulTemplate = ({ data, location }) => {
   const post = data.contentfulPost;
@@ -12,7 +11,6 @@ const BlogPostContentfulTemplate = ({ data, location }) => {
 
   return (
     <Layout location={location} title={siteTitle}>
-      <SEO title={post.title} description={post.subtitle} />
       <article
         className="blog-post"
         itemScope
